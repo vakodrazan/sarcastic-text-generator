@@ -69,3 +69,45 @@ const funkyLetters = {
 	Z: 'ᶻ',
 };
 /* eslint-enable */
+
+const textarea = document.querySelector('[name="text"]');
+const result = document.querySelector('.result');
+const filterInputs = Array.from(document.querySelectorAll('[name="filter"]'));
+
+const transformText = text => {
+	// const filter = document.querySelector('[name="filter"]:checked').value;
+	const filter = filterInputs.find(input => input.checked).value;
+	const mod = Array.from(text).map(filters[filter]);
+	result.textContent = mod.join('');
+};
+
+const filters = {
+	sarcastic(letter, index) {
+		if (index % 2) {
+			return letter.toUpperCase();
+		} {
+			return letter.toLowerCase();
+		}
+	},
+	funky(letter) {
+		let funckyLetter = funkyLetters[letter];
+		if (funckyLetter) return funckyLetter;
+		funckyLetter = funkyLetters[letter.toLowerCase()];
+		if (funckyLetter) return funckyLetter;
+		return letter;
+ 	},
+	unable(letter) {
+		const random = Math.floor(Math.random() * 3);
+		if (letter === " " && random === 2) {
+			return "...";
+		}
+		return letter;
+	},
+}
+
+textarea.addEventListener("input", e => transformText(e.target.value));
+filterInputs.forEach(input => {
+	input.addEventListener("input", () => {
+		transformText( textarea.value);
+	});
+})
